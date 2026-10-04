@@ -1,14 +1,17 @@
 import sys
 sys.path.append("Code")
 
-from importlib.machinery import SourceFileLoader
+from importlib.util import spec_from_file_location, module_from_spec
 
-char_frequency_module = SourceFileLoader(
+spec = spec_from_file_location(
     "char_frequency",
     "Code/14_char_frequency.py"
-).load_module()
+)
 
-char_frequency = char_frequency_module.char_frequency
+module = module_from_spec(spec)
+spec.loader.exec_module(module)
+
+char_frequency = module.char_frequency
 
 
 def test_char_frequency():
@@ -30,3 +33,9 @@ def test_char_frequency_with_spaces():
         "r": 1,
         "d": 1
     }
+
+
+test_char_frequency()
+test_char_frequency_with_spaces()
+
+print("All test cases passed.")
