@@ -1,16 +1,21 @@
 import sys
 sys.path.append("Code")
 
-from importlib.machinery import SourceFileLoader
+from importlib.util import spec_from_file_location, module_from_spec
 
-word_freq = SourceFileLoader(
+spec = spec_from_file_location(
     "word_frequency",
     "Code/20_word_frequency.py"
-).load_module()
+)
+
+module = module_from_spec(spec)
+spec.loader.exec_module(module)
+
+word_frequency = module.word_frequency
 
 
 def test_word_frequency():
-    assert word_freq.word_frequency("python is easy and python is powerful") == {
+    assert word_frequency("python is easy and python is powerful") == {
         "python": 2,
         "is": 2,
         "easy": 1,
@@ -18,7 +23,12 @@ def test_word_frequency():
         "powerful": 1
     }
 
-    assert word_freq.word_frequency("hello hello world") == {
+    assert word_frequency("hello hello world") == {
         "hello": 2,
         "world": 1
     }
+
+
+test_word_frequency()
+
+print("All test cases passed.")
