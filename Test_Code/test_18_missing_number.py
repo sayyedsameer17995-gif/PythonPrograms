@@ -1,15 +1,25 @@
 import sys
 sys.path.append("Code")
 
-from importlib.machinery import SourceFileLoader
+from importlib.util import spec_from_file_location, module_from_spec
 
-missing_number = SourceFileLoader(
+spec = spec_from_file_location(
     "missing_number",
     "Code/18_missing_number.py"
-).load_module()
+)
+
+module = module_from_spec(spec)
+spec.loader.exec_module(module)
+
+find_missing_number = module.find_missing_number
 
 
 def test_find_missing_number():
-    assert missing_number.find_missing_number([1, 2, 3, 5, 6]) == 4
-    assert missing_number.find_missing_number([1, 2, 4, 5]) == 3
-    assert missing_number.find_missing_number([1, 3, 4, 5]) == 2
+    assert find_missing_number([1, 2, 3, 5, 6]) == 4
+    assert find_missing_number([1, 2, 4, 5]) == 3
+    assert find_missing_number([1, 3, 4, 5]) == 2
+
+
+test_find_missing_number()
+
+print("All test cases passed.")
