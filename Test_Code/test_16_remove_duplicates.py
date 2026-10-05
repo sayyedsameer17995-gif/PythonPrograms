@@ -1,12 +1,15 @@
 import sys
-from importlib.machinery import SourceFileLoader
-
 sys.path.append("Code")
 
-module = SourceFileLoader(
+from importlib.util import spec_from_file_location, module_from_spec
+
+spec = spec_from_file_location(
     "remove_duplicates",
     "Code/16_remove_duplicates.py"
-).load_module()
+)
+
+module = module_from_spec(spec)
+spec.loader.exec_module(module)
 
 remove_duplicates = module.remove_duplicates
 
@@ -21,3 +24,9 @@ def test_remove_duplicates_with_strings():
         "banana",
         "orange"
     ]
+
+
+test_remove_duplicates()
+test_remove_duplicates_with_strings()
+
+print("All test cases passed.")
